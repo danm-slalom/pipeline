@@ -3,7 +3,7 @@
 node {
    properties([
      pipelineTriggers([
-       [$class: "TimerTrigger", spec: "H * * * *"]
+       [$class: "TimerTrigger", spec: "H/15 * * * *"]
      ])
    ])
    stage('Preparation') { // for display purposes
