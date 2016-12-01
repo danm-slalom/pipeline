@@ -4,7 +4,8 @@ node {
    properties([
      pipelineTriggers([
        [$class: "TimerTrigger", spec: "H/15 * * * *"]
-     ])
+     ]),
+     buildDiscarder([])
    ])
    stage('Preparation') { // for display purposes
       // Get 'code' from a GitHub repository
