@@ -7,7 +7,8 @@ node {
      ]),
      buildDiscarder(strategy: [
        $class: "LogRotator"
-       ])
+     ]),
+     disableConcurrentBuilds
    ])
    stage('Preparation') { // for display purposes
       // Get 'code' from a GitHub repository
