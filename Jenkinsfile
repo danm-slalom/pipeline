@@ -5,7 +5,9 @@ node {
      pipelineTriggers([
        [$class: "TimerTrigger", spec: "H/15 * * * *"]
      ]),
-     buildDiscarder([])
+     buildDiscarder(strategy: [
+       $class: "LogRotator"
+       ])
    ])
    stage('Preparation') { // for display purposes
       // Get 'code' from a GitHub repository
