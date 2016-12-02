@@ -8,8 +8,8 @@ node {
        daysToKeepStr: '',
        numToKeepStr: '')),
      disableConcurrentBuilds(),
-     [$class: 'RebuildSettings', autoRebuild: false, rebuildDisabled: false],
-     pipelineTriggers([timerTrigger(spec: "H/15 * * * *")])
+     [$class: 'RebuildSettings', autoRebuild: true, rebuildDisabled: false],
+     pipelineTriggers([timerTrigger(spec: "58 * * * *")])
    ])
    stage('Preparation') { // for display purposes
       // Get 'code' from a GitHub repository
