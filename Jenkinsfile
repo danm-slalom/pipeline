@@ -2,13 +2,14 @@
 
 node {
    properties([
-     pipelineTriggers([
-       [$class: "TimerTrigger", spec: "H/15 * * * *"]
-     ]),
-     buildDiscarder(strategy: [
-       $class: "LogRotator"
-     ]),
-     disableConcurrentBuilds()
+     buildDiscarder(logRotator(
+       artifactDaysToKeepStr: '',
+       artifactNumToKeepStr: '',
+       daysToKeepStr: '',
+       numToKeepStr: '')),
+     disableConcurrentBuilds(),
+     [$class: 'RebuildSettings', autoRebuild: false, rebuildDisabled: false],
+     pipelineTriggers([timerTrigger(spec: "H/15 * * * *")])
    ])
    stage('Preparation') { // for display purposes
       // Get 'code' from a GitHub repository
@@ -29,6 +30,6 @@ node {
       echo "This is the stage at which we would ship off the freshly built artifact to the binary repository."
    }
    stage('Sign Off') {
-      echo "And thus concludes the pipeline build.  May you go in peace."
+      echo "And thus concludes the pipeline build.  May you go in peace. ☮"
    }
 }
