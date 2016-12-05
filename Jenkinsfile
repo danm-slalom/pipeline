@@ -2,10 +2,7 @@
 
 node {
    properties([
-     [$class: 'ParametersDefinitionProperty', parameterDefinitions:
-       [[$class: 'StringParameterDefinition', defaultValue: 'mazurcluster.cxco9mwgn8j6.us-west-1.redshift.amazonaws.com', description: 'Redshift hostname', name : 'DBHOST'],
-        [$class: 'StringParameterDefinition', defaultValue: 'dev', description: 'Default DB name', name : 'DEFAULTDB'],
-        [$class: 'StringParameterDefinition', defaultValue: '5439', description: 'Redshift port', name: 'DBPORT']]],
+     parameters([string(defaultValue: 'dev', description: 'Default DB name', name: 'DEFAULTDB')]),
      buildDiscarder(logRotator(
        artifactDaysToKeepStr: '5',
        artifactNumToKeepStr: '10',
