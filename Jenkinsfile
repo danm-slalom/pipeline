@@ -30,7 +30,7 @@ usernameVariable: 'DBUSER', passwordVariable: 'DBPASSWORD']]) {
      --username ${DBUSER} -c "select * from abac_file_list where file_name = 'file1.txt';" dev`
             if [ "$RESULT" = "Y" ]; then exit 0; else exit 1; fi
             '''
-            if returnVal != 0
+            if (returnVal != 0)
               error 'We did not get the desired status and are stopping the build'
          } else {
             echo('sorry charlie.')
