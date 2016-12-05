@@ -32,8 +32,10 @@ usernameVariable: 'DBUSER', passwordVariable: 'DBPASSWORD']]) {
             if [ $RESULT = "1" ]; then exit 0; else exit 99; fi
             '''
             if (returnVal != 0) {
-              echo "Data is not is the desired state (returnStatus: ${returnVal}).  Stopping the build..."
+              msg = "Data is not is the desired state (returnStatus: ${returnVal}).  Stopping the build..."
+              echo msg
               currentBuild.result = 'UNSTABLE'
+              throw new Excption(msg)
 //              error "We did not get the desired status (${returnVal}) and are therefore stopping the build"
             }
          } else {
