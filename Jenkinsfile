@@ -25,7 +25,7 @@ node {
         sh '''
         export PGPASSWORD=$DBPASSWORD
         psql --host  mazurcluster.cxco9mwgn8j6.us-west-1.redshift.amazonaws.com --port 5439 \
- --username ${DBUSER} -c 'select * from abac_file_list order by file_name;' dev
+ --username \$\{DBUSER\} -c 'select * from abac_file_list order by file_name;' dev
         '''
      } else {
         echo('sorry charlie.')
