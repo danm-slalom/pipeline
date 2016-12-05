@@ -27,7 +27,7 @@ node {
 usernameVariable: 'DBUSER', passwordVariable: 'DBPASSWORD']]) {
          if (isUnix()) {
             sh returnStatus: true, script: '''export PGPASSWORD=$DBPASSWORD
-            export RESULT=`psql -A -t --host  mazurcluster.cxco9mwgn8j6.us-west-1.redshift.amazonaws.com --port 5439 --username ${DBUSER} -c "select count(iscompleted) from abac_file_list where file_name = 'file1.txt' and iscompleted = 'Y';" dev`
+            export RESULT=`psql -A -t --host  mazurcluster.cxco9mwgn8j6.us-west-1.redshift.amazonaws.com --port 5439 --username ${DBUSER} -c "select count(iscompleted) from abac_file_list where file_name = 'file1.txtxxx' and iscompleted = 'Y';" dev`
             echo "Rowcount result is: $RESULT"
             if [ $RESULT = "1" ]; then exit 0; else exit 99; fi
             '''
