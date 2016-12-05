@@ -28,7 +28,7 @@ usernameVariable: 'DBUSER', passwordVariable: 'DBPASSWORD']]) {
             returnVal = sh returnStatus: true, script: '''export PGPASSWORD=$DBPASSWORD
             export RESULT = `psql -A -t --host  mazurcluster.cxco9mwgn8j6.us-west-1.redshift.amazonaws.com --port 5439 \
      --username ${DBUSER} -c "select iscompleted from abac_file_list where file_name = 'file1.txt';" dev`
-            if [ "$RESULT" = "Y" ]; then exit 0; else exit 99; fi
+            if [ $RESULT = "Y" ]; then exit 0; else exit 99; fi
             '''
             if (returnVal != 0)
               error "We did not get the desired status (${returnVal}) and are stopping the build"
