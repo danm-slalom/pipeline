@@ -27,7 +27,7 @@ usernameVariable: 'DBUSER', passwordVariable: 'DBPASSWORD']]) {
          if (isUnix()) {
             returnVal = sh returnStatus: true, script: '''export PGPASSWORD=$DBPASSWORD
             RESULT = `psql -A -t --host  mazurcluster.cxco9mwgn8j6.us-west-1.redshift.amazonaws.com --port 5439 \
-     --username ${DBUSER} -c "select * from abac_file_list where file_name = 'file1.txt';" dev`
+     --username ${DBUSER} -c "select iscompleted from abac_file_list where file_name = 'file1.txt';" dev`
             if [ "$RESULT" = "Y" ]; then exit 0; else exit 1; fi
             '''
             if (returnVal != 0)
