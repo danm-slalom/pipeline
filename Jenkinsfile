@@ -28,7 +28,7 @@ usernameVariable: 'DBUSER', passwordVariable: 'DBPASSWORD']]) {
             sh '''
             export PGPASSWORD=$DBPASSWORD
             psql --host  mazurcluster.cxco9mwgn8j6.us-west-1.redshift.amazonaws.com --port 5439 \
-     --username ${DBUSER} -c 'select * from abac_file_list where file_name = ''file1.txt'';' dev
+     --username ${DBUSER} -c 'select * from abac_file_list where file_name = "file1.txt";' dev
             '''
          } else {
             echo('sorry charlie.')
