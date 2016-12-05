@@ -51,6 +51,12 @@ usernameVariable: 'DBUSER', passwordVariable: 'DBPASSWORD']]) {
          bat(/copy_red_shift\copy_red_shift_run.bat/)
       }
    }
+   stage('Script') {
+      // Run another script
+      if (isUnix()) {
+         sh "./scripts/simple-echo.sh"
+      }
+   }
    stage('Results') {
      echo "If we had run tests, this is the the stage in which we would process them."
    }
