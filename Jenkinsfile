@@ -32,12 +32,11 @@ usernameVariable: 'DBUSER', passwordVariable: 'DBPASSWORD']]) {
             if [ $RESULT = "1" ]; then exit 0; else exit 99; fi
             '''
             if (returnVal != 0) {
-              echo "Data is not is the desired state (returnStatus: ${returnVal}).  Stopping the build..."
-              stage 'Unstable terminus'
-            } else {
-              stage 'Build'
+              msg = "Data is not is the desired state (returnStatus: ${returnVal}).  Stopping the build..."
+              echo msg
+              currentBuild.result = 'UNSTABLE'
+              error(msg)
             }
-
          } else {
             echo('sorry charlie.  ')
          }
@@ -57,11 +56,6 @@ usernameVariable: 'DBUSER', passwordVariable: 'DBPASSWORD']]) {
    }
    stage('Publish') {
       echo "This is the stage at which we would ship off the freshly built artifact to the binary repository."
-      stage 'Signing Off'
-   }
-   stage('Unstable terminus') {
-      echo "Unstable build"
-      currentBuild.result = 'UNSTABLE'
    }
    stage('Signing Off') {
      echo "The build is done, go in ☮"
