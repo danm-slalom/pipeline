@@ -26,13 +26,13 @@ node {
        withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'redshift-creds',
 usernameVariable: 'DBUSER', passwordVariable: 'DBPASSWORD']]) {
          if (isUnix()) {
-            returnVal = sh returnStatus: true, script: '''export PGPASSWORD=$DBPASSWORD
+            sh returnStatus: true, script: '''export PGPASSWORD=$DBPASSWORD
             export RESULT=`psql -A -t --host  mazurcluster.cxco9mwgn8j6.us-west-1.redshift.amazonaws.com --port 5439 --username ${DBUSER} -c "select count(iscompleted) from abac_file_list where file_name = 'file1.txt' and iscompleted = 'Y';" dev`
             echo "Rowcount result is: $RESULT"
             if [ $RESULT = "1" ]; then exit 0; else exit 99; fi
             '''
-            if (returnVal != 0) {
-              echo "Data is not is the desired state (returnStatus: ${returnVal}).  Stopping the build..."
+            if (currentBuild.result != 0) {
+              echo "Data is not is the desired state (returnStatus: ${currentBuild.result}).  Stopping the build..."
               currentBuild.result = 'UNSTABLE'
 //              error "We did not get the desired status (${returnVal}) and are therefore stopping the build"
             }
