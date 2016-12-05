@@ -2,6 +2,10 @@
 
 node {
    properties([
+     [$class: 'ParametersDefinitionProperty', parameterDefinitions:
+       [[$class: 'StringParameterDefinition', defaultValue: 'mazurcluster.cxco9mwgn8j6.us-west-1.redshift.amazonaws.com', description: 'Redshift hostname', name : 'DBHOST'],
+        [$class: 'StringParameterDefinition', defaultValue: 'dev', description: 'Default DB name', name : 'DEFAULTDB'],
+        [$class: 'StringParameterDefinition', defaultValue: '5439', description: 'Redshift port', name: 'DBPORT']]],
      buildDiscarder(logRotator(
        artifactDaysToKeepStr: '5',
        artifactNumToKeepStr: '10',
@@ -21,8 +25,10 @@ node {
      // Check whether we are prepared to proceed to a subsequent step
      // Assumes the presence of DBUSER and DBPASSWORD credentials configured in
      // the Jenkins master.
-     // TODO: Parameterize the various DB connectivity informaiton
-     node('build slave') {  // Targeting a specific slave instance
+     // TODO: Parameterize the various DB connectivity information
+     node('build slave') {  // Targeting a specific slave instance, one having
+                            // the required software (psql) installed
+       echo "Did we get a parameter?: [[$DEFAULTDB]]"
        withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'redshift-creds',
 usernameVariable: 'DBUSER', passwordVariable: 'DBPASSWORD']]) {
          if (isUnix()) {
