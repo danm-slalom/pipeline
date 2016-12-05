@@ -14,7 +14,7 @@ node {
      ])
    ])
    stage('Preparation') {
-      // Get 'code', in this case from a GitHub repository
+      // Get 'code', in this case from a GitHub repository:
       git 'https://github.com/danm-slalom/pipeline.git'
    }
    stage('Check Status') {
@@ -22,7 +22,7 @@ node {
      // Assumes the presence of DBUSER and DBPASSWORD credentials configured in
      // the Jenkins master.
      // TODO: Parameterize the various DB connectivity informaiton
-     node('build slave') {
+     node('build slave') {  // Targeting a specific slave instance
        withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'redshift-creds',
 usernameVariable: 'DBUSER', passwordVariable: 'DBPASSWORD']]) {
          if (isUnix()) {
@@ -34,8 +34,8 @@ usernameVariable: 'DBUSER', passwordVariable: 'DBPASSWORD']]) {
             if (returnVal != 0) {
               msg = "Data is not is the desired state (returnStatus: ${returnVal}).  Stopping the build..."
               echo msg
-              currentBuild.result = 'UNSTABLE'
               error(msg)
+              currentBuild.result = 'UNSTABLE'
             }
          } else {
             echo('sorry charlie.  ')
