@@ -3,22 +3,37 @@
 node {
    properties([
      buildDiscarder(logRotator(
-       artifactDaysToKeepStr: '3',
-       artifactNumToKeepStr: ''5,
-       daysToKeepStr: '',
-       numToKeepStr: '')),
+       artifactDaysToKeepStr: '5',
+       artifactNumToKeepStr: '10',
+       daysToKeepStr: '7',
+       numToKeepStr: '10')),
      disableConcurrentBuilds(),
      [$class: 'RebuildSettings', autoRebuild: true, rebuildDisabled: false],
      pipelineTriggers([
-       [$class: "TimerTrigger", spec: "5 * * * *"]
+       [$class: "TimerTrigger", spec: "35 * * * *"]
      ])
    ])
-   stage('Preparation') { // for display purposes
-      // Get 'code' from a GitHub repository
+   stage('Preparation') {
+      // Get 'code', in this case from a GitHub repository
       git 'https://github.com/danm-slalom/pipeline.git'
    }
+   stage('Check Status') {
+     // Check whether we are prepared to proceed to a subsequent step
+     // Assumes the presence of DBUSER and DBPASSWORD credentials configured in
+     // the Jenkins master.
+     if (isUnix()) {
+        sh '''
+        export PGPASSWORD=$DBPASSWORD
+        psql --host  mazurcluster.cxco9mwgn8j6.us-west-1.redshift.amazonaws.com --port 5439 \
+ --username ${DBUSER} -c 'select * from abac_file_list order by file_name;' dev
+        '''
+     } else {
+        echo('sorry charlie.')
+     }
+
+   }
    stage('Build') {
-      // Run the maven build
+      // Run the artifact script
       if (isUnix()) {
          sh "./copy_red_shift/copy_red_shift_run.sh"
       } else {
