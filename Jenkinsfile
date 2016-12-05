@@ -21,6 +21,7 @@ node {
      // Check whether we are prepared to proceed to a subsequent step
      // Assumes the presence of DBUSER and DBPASSWORD credentials configured in
      // the Jenkins master.
+     // TODO: Parameterize the various DB connectivity informaiton
      node('build slave') {
        withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'redshift-creds',
 usernameVariable: 'DBUSER', passwordVariable: 'DBPASSWORD']]) {
@@ -31,9 +32,11 @@ usernameVariable: 'DBUSER', passwordVariable: 'DBPASSWORD']]) {
             if [ $RESULT = "1" ]; then exit 0; else exit 99; fi
             '''
             if (returnVal != 0)
-              error "We did not get the desired status (${returnVal}) and are stopping the build"
+              echo "Data is not is the desired state.  Stopping the build..."
+              exit 0
+//              error "We did not get the desired status (${returnVal}) and are therefore stopping the build"
          } else {
-            echo('sorry charlie.')
+            echo('sorry charlie.  ')
          }
        }
      }
