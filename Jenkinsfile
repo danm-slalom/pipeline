@@ -21,16 +21,17 @@ node {
      // Check whether we are prepared to proceed to a subsequent step
      // Assumes the presence of DBUSER and DBPASSWORD credentials configured in
      // the Jenkins master.
-     if (isUnix()) {
-        sh '''
-        export PGPASSWORD=$DBPASSWORD
-        psql --host  mazurcluster.cxco9mwgn8j6.us-west-1.redshift.amazonaws.com --port 5439 \
- --username \${DBUSER} -c 'select * from abac_file_list order by file_name;' dev
-        '''
-     } else {
-        echo('sorry charlie.')
+     node('build slave') {
+       if (isUnix()) {
+          sh '''
+          export PGPASSWORD=$DBPASSWORD
+          psql --host  mazurcluster.cxco9mwgn8j6.us-west-1.redshift.amazonaws.com --port 5439 \
+   --username \${DBUSER} -c 'select * from abac_file_list order by file_name;' dev
+          '''
+       } else {
+          echo('sorry charlie.')
+       }
      }
-
    }
    stage('Build') {
       // Run the artifact script
