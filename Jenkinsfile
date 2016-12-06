@@ -4,7 +4,7 @@ node {
    properties([
      parameters([string(defaultValue: 'dev', description: 'Default database to connect to', name: 'DEFAULTDB'),
        string(defaultValue: 'mazurcluster.cxco9mwgn8j6.us-west-1.redshift.amazonaws.com', description: 'Endpoint hostname of the redshift cluster', name: 'DBHOST'),
-       string(defaultValue: '5439', description: 'Port number of the redshift cluster', name: 'DBPORT')]), 
+       string(defaultValue: '5439', description: 'Port number of the redshift cluster', name: 'DBPORT')]),
      buildDiscarder(logRotator(
        artifactDaysToKeepStr: '5',
        artifactNumToKeepStr: '10',
@@ -27,12 +27,11 @@ node {
      // TODO: Parameterize the various DB connectivity information
      node('build slave') {  // Targeting a specific slave instance, one having
                             // the required software (psql) installed
-       echo "Did we get a parameter?: [[$DEFAULTDB]]"
        withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'redshift-creds',
 usernameVariable: 'DBUSER', passwordVariable: 'DBPASSWORD']]) {
          if (isUnix()) {
             returnVal = sh returnStatus: true, script: '''export PGPASSWORD=$DBPASSWORD
-            export RESULT=`psql -A -t --host  mazurcluster.cxco9mwgn8j6.us-west-1.redshift.amazonaws.com --port 5439 --username ${DBUSER} -c "select count(iscompleted) from abac_file_list where file_name = 'file1.txt' and iscompleted = 'Y';" dev`
+            export RESULT=`psql -A -t --host $DBHOST --port $DBPORT --username $DBUSER -c "select count(iscompleted) from abac_file_list where file_name = 'file1.txt' and iscompleted = 'Y';" $DEFAULTDB`
             echo "Rowcount result is: $RESULT"
             if [ $RESULT = "1" ]; then exit 0; else exit 99; fi
             '''
