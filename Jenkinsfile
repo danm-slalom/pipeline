@@ -2,7 +2,9 @@
 
 node {
    properties([
-     parameters([string(defaultValue: 'dev', description: 'Default DB name', name: 'DEFAULTDB')]),
+     parameters([string(defaultValue: 'dev', description: 'Default database to connect to', name: 'DEFAULTDB'),
+       string(defaultValue: 'mazurcluster.cxco9mwgn8j6.us-west-1.redshift.amazonaws.com', description: 'Endpoint hostname of the redshift cluster', name: 'DBHOST'),
+       string(defaultValue: '5439', description: 'Port number of the redshift cluster', name: 'DBPORT')]), 
      buildDiscarder(logRotator(
        artifactDaysToKeepStr: '5',
        artifactNumToKeepStr: '10',
